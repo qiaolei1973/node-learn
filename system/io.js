@@ -1,0 +1,9 @@
+//延迟执行  
+   process.nextTick(function(){
+       console.log('nextTick');
+   })
+    setImmediate(function(){
+       console.log('immediate');
+   })
+//立即执行
+    console.log('立即执行');
