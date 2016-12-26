@@ -9,7 +9,7 @@
             "type": "node",
             "request": "launch",
             "name": "启动程序",
-            "program": "${workspaceRoot}\\service.js",
+            "program": "${workspaceRoot}\\service\\http.js",
             "cwd": "${workspaceRoot}",
             "outFiles": [],
             "sourceMaps": true
