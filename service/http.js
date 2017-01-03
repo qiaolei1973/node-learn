@@ -5,6 +5,8 @@ const querystring = require('querystring');
 const PORT = 3000;
 const KEY = 'session_id';
 const EXPIRES = 3 * 60 * 1000;
+const SECRET = 'abc';
+
 let sessions = {};
 
 http.createServer(function (req, res) {
@@ -139,11 +141,27 @@ const sessionCheck = (req, res) => {
 
 const writeHead = (req, res) => {
     let cookies = res.getHeader('Set-Cookie');
-    let session = seralizeCookie(KEY, req.session.id);
+    const sessionId = req.session.id;
+    //const val = sign(sessionId);
+    const session = seralizeCookie(KEY, sessionId);
     if (cookies) {
         cookies = Array.isArray(cookies) ? cookies.concat(session) : [cookies, session];
     } else {
         cookies = session;
     }
     res.setHeader('Set-Cookie', cookies);
+}
+
+//session秘钥
+const sign = (val) => {
+    return val + '.' + crypto
+        .createHmac('sha256', SECRET)
+        .update(val)
+        .digest('base64')
+        .replace(/\=+$/, '');
+}
+//解密
+const unsign = (val) => {
+    const str = val.slice(0, val.lastIndexOf('.'));
+    return sign(str, SECRET) === val ? str : false;
 }
